@@ -1,0 +1,8 @@
+https://medium.com/@afrazahmad090/laravel-many-to-many-relationship-explained-822b554c1973
+
+
+https://www.youtube.com/watch?v=WOLWDt2DRlw
+
+
+//cria o banco
+php artisan migrate
