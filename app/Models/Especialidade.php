@@ -4,11 +4,62 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Especialidade extends Model
 {
     use HasFactory;
-    protected string $table = 'ESPECIALIDADES';
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'ESPECIALIDADES';
+    public $timestamps = false;
+    protected $connection = 'mysql';
+
+    public static function listar(int $limite)
+    {
+        $sql = self::select([
+            "id",
+            "nome",
+            "descricao"
+        ])->limit($limite);
+
+        return $sql->get();
+    }
+
+    public static function selectById(int $id)
+    {
+        return self::where('id', $id)->first();
+    }
+
+    public static function salvar(Request $request): int
+    {
+        return self::insert([
+            "nome" => $request->input('nome'),
+            "descricao" => $request->input('descricao')
+        ]);
+    }
+
+    public static function atualizar(Request $request): int
+    {
+        $especialidade = self::selectById($request->input('id'));
+        if ($especialidade) {
+            $especialidade->nome = $request->input('nome');
+            $especialidade->descricao = $request->input('descricao');
+            return $especialidade->save();
+        }
+        return false;
+    }
+
+    public static function excluir(int $id): int
+    {
+        $especialidade = self::selectById($id);
+        if ($especialidade)
+            return $especialidade->delete();
+        return true;
+    }
 
 
     public function medicos()

@@ -11,3 +11,20 @@ php artisan migrate
 Tutoriais Vue
 https://stackoverflow.com/questions/63853750/how-to-install-vue-js-in-laravel-8
 https://www.youtube.com/watch?v=Whm_wj9MNI4
+
+
+Limpa o cache(necessário quando as configurações são alteradas)
+php artisan config:clear
+
+
+Cria Controller usuário
+php artisan make:controller Usuario
+
+Cria Model usuário
+php artisan make:model Models/Usuario
+
+Incializa um server
+php artisan serve
+
+
+https://youtu.be/L15b-hO5CrQ
