@@ -8,3 +8,6 @@ https://www.youtube.com/watch?v=WOLWDt2DRlw
 php artisan migrate
 
 
+Tutoriais Vue
+https://stackoverflow.com/questions/63853750/how-to-install-vue-js-in-laravel-8
+https://www.youtube.com/watch?v=Whm_wj9MNI4

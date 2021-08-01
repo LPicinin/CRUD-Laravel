@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Medico extends Model
 {
-    use HasFactory;
+    //use HasFactory;
+
+    protected string $table = 'MEDICOS';
 
     public function especialidades()
     {
