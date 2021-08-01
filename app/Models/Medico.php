@@ -24,6 +24,7 @@ class Medico extends Model
     {
         $sql = self::select([
             "id",
+            "nome",
             "CRM",
             "telefone",
             "email",
@@ -35,18 +36,19 @@ class Medico extends Model
 
     public static function selectById(int $id)
     {
-        return 0;
-        return self::where('id', $id)->first();
+        $medico = Medico::find($id);
+        $medico->especialidades; //comentar caso não deseje que as especialidades sejam retornadas
+        return $medico;
+        //return self::where('id', $id)->first();
     }
 
     public static function salvar(Request $request)
     {
-        $flag = true;
         DB::beginTransaction();
         try {
             $med = new Medico();
             $med->nome = $request->input('nome');
-            $med->CRM= $request->input('CRM');
+            $med->CRM = $request->input('CRM');
             $med->telefone = $request->input('telefone');
             $med->email = $request->input('email');
             $med->dt_cadastro = new Carbon();
@@ -56,49 +58,40 @@ class Medico extends Model
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e->getMessage();
+            return $e;
         }
-        return $flag;
+        return true;
     }
 
     public static function atualizar(Request $request): int
     {
-        $flag = true;
+        $medico = self::selectById($request->input('id'));
+
+        if (!$medico)
+            return false;
         DB::beginTransaction();
         try {
-            $med = new Medico();
-            $med->nome = $request->input('nome');
-            $med->CRM= $request->input('CRM');
-            $med->telefone = $request->input('telefone');
-            $med->email = $request->input('email');
-            $med->dt_cadastro = new Carbon();
-            $med->save();
-            $med->especialidades()->sync($request->input('especialidades'));
+            $medico->nome = $request->input('nome');
+            $medico->CRM = $request->input('CRM');
+            $medico->telefone = $request->input('telefone');
+            $medico->email = $request->input('email');
+            $medico->dt_cadastro = new Carbon();
+            $medico->save();
+            $medico->especialidades()->sync($request->input('especialidades'));
 
-            /*
-            $flag = self::insert([
-                "nome" => $request->input('nome'),
-                "CRM" => $request->input('CRM'),
-                "telefone" => $request->input('telefone'),
-                "email" => $request->input('email'),
-                "dt_cadastro" =>  new Carbon(),
-            ]);
-            */
-            //DB::getPdo()->lastInsertId();
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            return $e->getMessage();
+            return $e;
         }
-        return $flag;
+        return true;
     }
 
     public static function excluir(int $id): int
     {
-        return 0;
-        $especialidade = self::selectById($id);
-        if ($especialidade)
-            return $especialidade->delete();
+        $medico = self::selectById($id);
+        if ($medico)
+            return $medico->delete();
         return true;
     }
 
