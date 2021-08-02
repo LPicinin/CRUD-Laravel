@@ -33,3 +33,12 @@ https://jsfiddle.net/yyx990803/xgrjzsup/
 
 descartando alterações não commitadas com git:
 https://stackoverflow.com/questions/65627536/the-token-is-not-a-valid-statement-separator-in-this-version
+
+
+Navegação com blade
+https://youtu.be/yJmdfvBZ1so
+
+
+
+Crud table
+https://www.tutorialrepublic.com/snippets/preview.php?topic=bootstrap&file=crud-data-table-for-database-with-modal-form
