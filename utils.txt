@@ -29,3 +29,7 @@ php artisan serve
 
 https://youtu.be/L15b-hO5CrQ
 https://jsfiddle.net/yyx990803/xgrjzsup/
+
+
+descartando alterações não commitadas com git:
+https://stackoverflow.com/questions/65627536/the-token-is-not-a-valid-statement-separator-in-this-version
