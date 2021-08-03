@@ -1,0 +1,22 @@
+.barraBotoes {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.barraBotoes>button {
+    margin: 1rem;
+    width: 6em;
+}
+
+.tabelaOpcoes {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.busca {
+    display: flex;
+    flex-direction: row;
+}

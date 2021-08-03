@@ -9,6 +9,7 @@
         <router-link to="/especialidade">Go to Bar</router-link>
       </li>
     </nav>
+    
     <router-view></router-view>
     <img alt="Vue logo" src="./assets/logo.png" />
   </div>
