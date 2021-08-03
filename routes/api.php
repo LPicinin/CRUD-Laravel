@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\EspecialidadeController;
-use App\Http\Controllers\MedicoController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\EspecialidadeController;
+use App\Http\Controllers\API\MedicoController;
 
 /*
 |--------------------------------------------------------------------------

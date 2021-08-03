@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Especialidade;
@@ -18,31 +18,12 @@ class EspecialidadeController extends Controller
         return Especialidade::selectById($id);
     }
 
-    public static function index()
-    {
-        $lista = Especialidade::listar(100);
-        return view('especialidade.cadastro', [
-            "list" => $lista
-        ]);
-    }
-
     public static function salvar(Request $request)
     {
-
-        $request->validate([
-            "nome" => "required",
-            "descricao" => "required",
-        ]);
-
-        $lista = Especialidade::listar(100);
-
-        if (Especialidade::cadastrar($request))
-            return view('especialidade.cadastrar', [
-                "sucesso" => $request->input('nome') + " cadastrado com sucesso",
-                "especialidades" => $lista
-            ]);
+        if (Especialidade::salvar($request))
+            return response("ok", 201);
         else
-            echo "Ops! Falhou ao cadastrar!";
+            return  response("erro", 409);
     }
 
     public static function atualizar(Request $request)

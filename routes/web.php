@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\EspecialidadeController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +21,10 @@ Route::get('/medico', function () {
     return view('medico');
 });
 
-Route::get('/especialidade', function () {
-    return view('especialidade');
+//Route::get('/especialidade', 'EspecialidadeController@index');
+Route::get('/especialidade', function ()
+{
+    return EspecialidadeController::index();
 });
+
+Route::post('/especialidade/salvar', 'EspecialidadeController@salvar')->name('salvarEspecialidade');
