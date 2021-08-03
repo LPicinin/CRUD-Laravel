@@ -29,7 +29,9 @@ class Medico extends Model
             "telefone",
             "email",
             "dt_cadastro"
-        ])->limit($limite);
+        ]);
+        if($limite != 0)
+            $sql = $sql->limit($limite);
 
         return $sql->get();
     }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\EspecialidadeController;
 use App\Http\Controllers\API\MedicoController;
+use Mockery\Undefined;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/medico', [MedicoController::class, 'salvar']);
     Route::put('/medico', [MedicoController::class, 'atualizar']);
     Route::delete('/medico/{id}', [MedicoController::class, 'excluir']);
-    Route::get('/medicos/{limite?}', function (int $limite = 10) {
+    Route::get('/medicos/{limite?}', function (int $limite = 0) {
         return MedicoController::select($limite);
     });
     Route::get('/medico/{id}', function (int $id) {
@@ -32,7 +33,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/especialidade', [EspecialidadeController::class, 'salvar']);
     Route::put('/especialidade', [EspecialidadeController::class, 'atualizar']);
     Route::delete('/especialidade/{id}', [EspecialidadeController::class, 'excluir']);
-    Route::get('/especialidades/{limite?}', function (int $limite = 10) {
+    Route::get('/especialidades/{limite?}', function (int $limite = 0) {
         return EspecialidadeController::select($limite);
     });
     Route::get('/especialidade/{id}', function (int $id) {

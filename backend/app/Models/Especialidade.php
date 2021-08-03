@@ -24,7 +24,9 @@ class Especialidade extends Model
             "id",
             "nome",
             "descricao"
-        ])->limit($limite);
+        ]);
+        if($limite != 0)
+            $sql = $sql->limit($limite);
 
         return $sql->get();
     }
