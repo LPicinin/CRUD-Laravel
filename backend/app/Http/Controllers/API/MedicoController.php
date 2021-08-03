@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class MedicoController extends Controller
 {
-    public static function select(int $limite)
+    public static function select(Request $request, int $limite)
     {
-        return Medico::listar($limite);
+        return Medico::listar($request, $limite);
     }
 
     public static function selectById(int $id)

@@ -18,13 +18,16 @@ class Especialidade extends Model
     public $timestamps = false;
     protected $connection = 'mysql';
 
-    public static function listar(int $limite)
+    public static function listar(Request $request, int $limite)
     {
+        $nome = $request->query('nome');
         $sql = self::select([
             "id",
             "nome",
             "descricao"
         ]);
+        if($nome)
+            $sql->where('nome', 'like', '%'.$nome.'%');
         if($limite != 0)
             $sql = $sql->limit($limite);
 

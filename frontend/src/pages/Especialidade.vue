@@ -1,149 +1,134 @@
 <template>
   <main-layout>
     <div class="container">
-      <h1>Páginda Especialidade</h1>
-      <div class="container">
-        <div class="barraBotoes">
-          <div class="busca">
-            <input type="search" id="form1" class="form-control" />
-            <button type="button" class="btn btn-primary">
-              <i class="bi bi-search"></i>
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-bs-toggle="modal"
-              data-bs-target="#insertModal"
-            >
-              <i class="bi bi-plus-circle"></i>Add
-            </button>
-          </div>
-          <div class="container">
-            <!-- Modal para inserir cadastro -->
+      <div class="row mt-5">
+        <div
+          class="col-12 border-bottom mb-5 d-flex justify-content-between align-items-center"
+        >
+          <h2 :title="ex">{{ name }}</h2>
+          <p>{{ especialidadesCount }}</p>
+        </div>
+
+        <div class="col-4">
+          <form action="">
+            <div class="form-group mr-1 campo">
+              <label>Nome:</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nome aqui..."
+                v-model="especialidade.nome"
+              />
+            </div>
+
+            <div class="form-group mr-1 campo">
+              <label>Descrição</label>
+              <textarea
+                rows="5"
+                class="form-control"
+                placeholder="Descrição aqui..."
+                v-model="especialidade.descricao"
+              />
+            </div>
+
+            <div class="form-group ml-1 botoes">
+              <button
+                v-if="!isEdit"
+                class="btn btn-lg btn-rounded btn-success"
+                @click="cadastrar()"
+              >
+                Criar Especialidade
+              </button>
+              <button
+                v-if="isEdit"
+                class="btn btn-lg btn-rounded btn-primary"
+                @click="atualizar(especialidade)"
+              >
+                Atualizar Especialidade
+              </button>
+              <button
+                v-if="isEdit"
+                class="btn btn-lg btn-rounded btn-danger"
+                @click="cancelar"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-8 border-left">
+          <div class="contact" v-if="especialidades.length">
+            <!--Campo de busca-->
+            <div class="campoBusca">
+              <div class="input-group">
+                <div class="form-outline">
+                  <input
+                    type="search"
+                    id="form1"
+                    class="form-control"
+                    placeholder="Busca"
+                    v-model="queryBusca"
+                  />
+                </div>
+                <button type="button" class="btn btn-primary" @click="busca">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </div>
             <div
-              class="modal fade"
-              id="insertModal"
-              tabindex="-1"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
+              class="col-12 mb-2"
+              v-for="item in especialidades"
+              :key="item.id"
             >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                      Cadastro de especialidade
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="container">
-                      <div
-                        v-if="resposta.show"
-                        class="alert alert-success"
-                        role="alert"
-                      >
-                        {{ resposta.mensagem }}
-                      </div>
-                      <div class="mb-3">
-                        <label for="formnome" class="form-label">Nome:</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="formnome"
-                          placeholder=""
-                          v-model="especialidade.nome"
-                          required
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="formDescricao" class="form-label"
-                          >Descrição:
-                        </label>
-                        <textarea
-                          type="text"
-                          class="form-control"
-                          id="formDescricao"
-                          placeholder=""
-                          v-model="especialidade.descricao"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-primary"
-                      v-on:click="cadastrar"
-                    >
-                      Cadastrar
-                    </button>
-                  </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ item.nome }}</h5>
+
+                  <p class="card-text">
+                    {{ item.descricao }}
+                  </p>
+
+                  <a
+                    href="#"
+                    class="btn btn-sm btn-primary"
+                    @click="editEspecialidade(item)"
+                    >EDITAR</a
+                  >
+                  <a
+                    href="#"
+                    class="btn btn-sm btn-danger"
+                    @click="deleteEspecialidade(item.id)"
+                    >DELETAR</a
+                  >
                 </div>
               </div>
             </div>
           </div>
+          <div v-else>Nenhum contato encontrado!</div>
         </div>
       </div>
-
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th style="width: 5%">#</th>
-            <th style="width: 25%">Nome</th>
-            <th style="width: 55%">Descrição</th>
-            <th style="width: 15%">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in especialidades" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ item.nome }}</td>
-            <td>{{ item.descricao }}</td>
-            <td>
-              <div class="tabelaOpcoes">
-                <button class="btn btn-primary">
-                  <i class="bi bi-plus-circle">Editar</i>
-                </button>
-                <button class="btn btn-danger" v-on:click="excluir(item.id)">
-                  <i class="bi bi-dash-circle">Excluir</i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </main-layout>
 </template>
-<style scoped src="../css/especialidade.css"></style>
 <script>
 import MainLayout from "../layouts/Main.vue";
 import api from "../api";
 
 export default {
-  name: "Especialidade",
   components: {
     "main-layout": MainLayout,
   },
   data() {
     return {
+      queryBusca: "",
+      isEdit: false,
+      ex: "CRUD",
       resposta: {
         show: false,
         mensagem: "",
       },
+      name: "Especialidades",
       especialidades: [],
       especialidade: {
         id: 0,
@@ -155,23 +140,38 @@ export default {
   mounted() {
     this.refresh();
   },
+  computed: {
+    especialidadesCount() {
+      return `Total de especialidades é ${this.especialidades.length}`;
+    },
+  },
   methods: {
     estadoInicial() {
-      this.especialidade = {
-        id: 0,
-        nome: "",
-        descricao: "",
-      };
+      (this.isEdit = false),
+        (this.especialidade = {
+          id: 0,
+          nome: "",
+          descricao: "",
+        });
     },
     refresh() {
       api.get("especialidades").then((response) => {
         this.especialidades = response.data;
       });
     },
-    excluir(id) {
-      api.delete(`especialidade/${id}`).then(() => {
+    cancelar() {
+      this.estadoInicial();
+      this.refresh();
+    },
+    deleteEspecialidade(id) {
+      api.delete(`especialidade/${id}`).then((response) => {
+        console.log(response.data);
         this.refresh();
       });
+    },
+    editEspecialidade(especialidade) {
+      this.especialidade = especialidade;
+      this.isEdit = true;
     },
     cadastrar() {
       api
@@ -192,6 +192,41 @@ export default {
           console.log("Erro: " + e.message);
         });
     },
+    atualizar(especialidade) {
+      this.especialidade.nome = especialidade.nome;
+      this.especialidade.descricao = especialidade.descricao;
+      api.put("especialidade", this.especialidade).then(() => {
+        this.estadoInicial();
+        this.refresh();
+      });
+    },
+    busca() {
+      api.get(`especialidades?nome=${this.queryBusca}`).then((response) => {
+        this.especialidades = response.data;
+      });
+    },
   },
 };
 </script>
+
+<style scoped>
+.campo {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+}
+.botoes {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: space-between;
+}
+.campoBusca {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+</style>

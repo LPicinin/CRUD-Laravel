@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class EspecialidadeController extends Controller
 {
-    public static function select(int $limite)
+    public static function select(Request $request, int $limite)
     {
-        return Especialidade::listar($limite);
+        return Especialidade::listar($request, $limite);
     }
 
     public static function selectById(int $id)
@@ -36,6 +36,7 @@ class EspecialidadeController extends Controller
 
     public static function excluir(int $id)
     {
+
         if (Especialidade::excluir($id))
             return response("ok", 200);
         else
