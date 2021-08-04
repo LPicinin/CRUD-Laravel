@@ -14,3 +14,14 @@ Abrir o diretório do front-end pelo cmd e digitar os seguintes comandos:
 
  - npm i
  - npm run serve
+ #### Outras informações:
+ 
+ URL(s)
+ - http://localhost:8080/
+ - http://localhost:8080/especialidade
+ - http://localhost:8080/medico
+
+
+SGBD:
+
+ - MySQL
