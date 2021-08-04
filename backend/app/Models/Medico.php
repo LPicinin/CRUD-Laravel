@@ -35,8 +35,10 @@ class Medico extends Model
             $sql->where('nome', 'like', '%'.$nome.'%');
         if($limite != 0)
             $sql = $sql->limit($limite);
-
-        return $sql->get();
+        $medicos = $sql->get();
+        foreach($medicos as $med)
+            $med->especialidades;
+        return $medicos;
     }
 
     public static function selectById(int $id)

@@ -1,9 +1,16 @@
 <template>
   <main-layout>
     <div class="container">
-      <div class="row mt-5">
+      <div class="row mt-3">
         <div
-          class="col-12 border-bottom mb-5 d-flex justify-content-between align-items-center"
+          class="
+            col-12
+            border-bottom
+            mb-3
+            d-flex
+            justify-content-between
+            align-items-center
+          "
         >
           <h2 :title="ex">{{ name }}</h2>
           <p>{{ medicosCount }}</p>
@@ -48,35 +55,63 @@
                 v-model="medico.email"
               />
             </div>
-            <div class="form-group mr-1 campo">
-              <label>Data de cadastro</label>
-              <input
-                type="date"
-                class="form-control"
-                placeholder="Data de cadastro aqui..."
-                v-model="medico.dt_cadastro"
-              />
+
+            <div class="form-group mr-1">
+              <div class="sectionEspecialidades">
+                <div class="selectEspecialidades">
+                  <select v-model="especialidade">
+                    <option disabled value="">Escolha uma especialidade</option>
+                    <option
+                      v-for="item in especialidades"
+                      :key="item.id"
+                      v-bind:value="{ id: item.id, nome: item.nome }"
+                    >
+                      {{ item.nome }}
+                    </option>
+                  </select>
+                  <button
+                    class="btn btn-primary"
+                    @click.prevent="adicionaEspecialidade"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div class="sectionEspecialidadesMedico">
+                  <div
+                    class="chip"
+                    v-for="item in medico.especialidades"
+                    :key="item.id"
+                  >
+                    {{ item.nome }}
+                    <span
+                      class="closebtn"
+                      @click.prevent="removeEspecialidade(item.id)"
+                      >&times;</span
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="form-group ml-1 botoes">
               <button
                 v-if="!isEdit"
                 class="btn btn-lg btn-rounded btn-success"
-                @click="cadastrar()"
+                @click.prevent="cadastrar()"
               >
-                Criar medico
+                Cadastrar medico
               </button>
               <button
                 v-if="isEdit"
                 class="btn btn-lg btn-rounded btn-primary"
-                @click="atualizar(medico)"
+                @click.prevent="atualizar()"
               >
                 Atualizar medico
               </button>
               <button
                 v-if="isEdit"
                 class="btn btn-lg btn-rounded btn-danger"
-                @click="cancelar"
+                @click.prevent="cancelar"
               >
                 Cancelar
               </button>
@@ -98,37 +133,39 @@
                     v-model="queryBusca"
                   />
                 </div>
-                <button type="button" class="btn btn-primary" @click="busca">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  @click.prevent="busca"
+                >
                   <i class="bi bi-search"></i>
                 </button>
               </div>
             </div>
-            <div
-              class="col-12 mb-2"
-              v-for="item in medicos"
-              :key="item.id"
-            >
+            <div class="col-12 mb-2" v-for="item in medicos" :key="item.id">
               <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">{{ item.nome }}</h5>
 
                   <p class="card-text">
-                    <b>CRM: </b>{{ item.CRM }} <br>
-                    <b>Telefone: </b>{{item.telefone}}<br>
-                    <b>E-mail: </b>{{item.email}}<br>
-                    <b>Data de Cadastro: </b>{{item.dt_cadastro}}<br>
+                    <b>CRM: </b>{{ item.CRM }} <br />
+                    <b>Telefone: </b>{{ item.telefone }}<br />
+                    <b>E-mail: </b>{{ item.email }}<br />
+                    <b>Data de Cadastro: </b>{{ item.dt_cadastro }}<br />
+                    <b>Especialidades: </b>
+                    {{ getEspecialidades(item.especialidades) }}<br />
                   </p>
 
                   <a
                     href="#"
                     class="btn btn-sm btn-primary"
-                    @click="editmedico(item)"
+                    @click.prevent="editmedico(item)"
                     >EDITAR</a
                   >
                   <a
                     href="#"
                     class="btn btn-sm btn-danger"
-                    @click="deletemedico(item.id)"
+                    @click.prevent="deletemedico(item.id)"
                     >DELETAR</a
                   >
                 </div>
@@ -159,6 +196,8 @@ export default {
         mensagem: "",
       },
       name: "Médicos",
+      especialidade: {},
+      especialidades: [],
       medicos: [],
       medico: {
         id: 1,
@@ -166,11 +205,16 @@ export default {
         CRM: "",
         telefone: "",
         email: "",
-        dt_cadastro: ""
+        dt_cadastro: "",
+        especialidades: [],
       },
     };
   },
   mounted() {
+    api.get("especialidades").then((response) => {
+      this.especialidades = response.data;
+      console.log(response.data);
+    });
     this.refresh();
   },
   computed: {
@@ -210,10 +254,13 @@ export default {
       api
         .post("medico", {
           nome: this.medico.nome,
-          descricao: this.medico.descricao,
+          CRM: this.medico.CRM,
+          telefone: this.medico.telefone,
+          email: this.medico.email,
+          especialidades: this.medico.especialidades.map((es) => es.id),
         })
         .then((response) => {
-          console.log(response.status);
+          console.log(response);
           this.resposta = {
             show: true,
             mensagem: `${this.medico.nome} cadastrado com sucesso!`,
@@ -225,18 +272,44 @@ export default {
           console.log("Erro: " + e.message);
         });
     },
-    atualizar(medico) {
-      this.medico.nome = medico.nome;
-      this.medico.descricao = medico.descricao;
-      api.put("medico", this.medico).then(() => {
-        this.estadoInicial();
-        this.refresh();
-      });
+    atualizar() {
+      api
+        .put("medico", {
+          id: this.medico.id,
+          nome: this.medico.nome,
+          CRM: this.medico.CRM,
+          telefone: this.medico.telefone,
+          email: this.medico.email,
+          especialidades: this.medico.especialidades.map((es) => es.id),
+        })
+        .then(() => {
+          this.estadoInicial();
+          this.refresh();
+        });
     },
     busca() {
       api.get(`medicos?nome=${this.queryBusca}`).then((response) => {
         this.medicos = response.data;
       });
+    },
+    adicionaEspecialidade() {
+      console.log(this.especialidade.id);
+      if (this.medico.especialidades.indexOf(this.especialidade) === -1) {
+        this.medico.especialidades.push(this.especialidade);
+      }
+
+      this.especialidade = {};
+    },
+    removeEspecialidade(id) {
+      console.log(`Remover especialidade ${id}`);
+      let narr = [];
+      this.medico.especialidades.forEach((value) => {
+        if (value.id !== id) narr.push(value);
+      });
+      this.medico.especialidades = narr;
+    },
+    getEspecialidades(espec) {
+      return espec.map((es) => es.nome).toString();
     },
   },
 };
@@ -261,5 +334,34 @@ export default {
   align-items: flex-end;
   justify-content: flex-end;
 }
+.sectionEspecialidades {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1em;
+}
+.selectEspecialidades {
+  display: flex;
+  flex-direction: row;
+}
+.chip {
+  display: inline-block;
+  padding: 0 25px;
+  height: 50px;
+  font-size: 16px;
+  line-height: 50px;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+}
 
+.chip img {
+  float: left;
+  margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.sectionEspecialidadesMedico {
+  display: flex;
+  flex-direction: row;
+}
 </style>

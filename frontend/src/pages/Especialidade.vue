@@ -35,21 +35,21 @@
               <button
                 v-if="!isEdit"
                 class="btn btn-lg btn-rounded btn-success"
-                @click="cadastrar()"
+                @click.prevent="cadastrar()"
               >
                 Criar Especialidade
               </button>
               <button
                 v-if="isEdit"
                 class="btn btn-lg btn-rounded btn-primary"
-                @click="atualizar(especialidade)"
+                @click.prevent="atualizar(especialidade)"
               >
                 Atualizar Especialidade
               </button>
               <button
                 v-if="isEdit"
                 class="btn btn-lg btn-rounded btn-danger"
-                @click="cancelar"
+                @click.prevent="cancelar"
               >
                 Cancelar
               </button>
@@ -92,13 +92,13 @@
                   <a
                     href="#"
                     class="btn btn-sm btn-primary"
-                    @click="editEspecialidade(item)"
+                    @click.prevent="editEspecialidade(item)"
                     >EDITAR</a
                   >
                   <a
                     href="#"
                     class="btn btn-sm btn-danger"
-                    @click="deleteEspecialidade(item.id)"
+                    @click.prevent="deleteEspecialidade(item.id)"
                     >DELETAR</a
                   >
                 </div>
