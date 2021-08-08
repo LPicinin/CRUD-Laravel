@@ -1,5 +1,5 @@
 <template>
-  <main-layout>
+  <div class="medicina">
     <div class="container">
       <div class="row mt-3">
         <div
@@ -176,42 +176,40 @@
         </div>
       </div>
     </div>
-  </main-layout>
+  </div>
 </template>
+
 <script>
-import MainLayout from "../layouts/Main.vue";
-import api from "../api";
+import api from '../api';
 
 export default {
-  components: {
-    "main-layout": MainLayout,
-  },
+  name: 'Medicina',
   data() {
     return {
-      queryBusca: "",
+      queryBusca: '',
       isEdit: false,
-      ex: "CRUD",
+      ex: 'CRUD',
       resposta: {
         show: false,
-        mensagem: "",
+        mensagem: '',
       },
-      name: "Médicos",
+      name: 'Médicos',
       especialidade: {},
       especialidades: [],
       medicos: [],
       medico: {
         id: 1,
-        nome: "",
-        CRM: "",
-        telefone: "",
-        email: "",
-        dt_cadastro: "",
+        nome: '',
+        CRM: '',
+        telefone: '',
+        email: '',
+        dt_cadastro: '',
         especialidades: [],
       },
     };
   },
   mounted() {
-    api.get("especialidades").then((response) => {
+    api.get('especialidades').then((response) => {
       this.especialidades = response.data;
       console.log(response.data);
     });
@@ -225,14 +223,14 @@ export default {
   methods: {
     estadoInicial() {
       (this.isEdit = false),
-        (this.medico = {
-          id: 0,
-          nome: "",
-          descricao: "",
-        });
+      (this.medico = {
+        id: 0,
+        nome: '',
+        descricao: '',
+      });
     },
     refresh() {
-      api.get("medicos").then((response) => {
+      api.get('medicos').then((response) => {
         this.medicos = response.data;
       });
     },
@@ -252,7 +250,7 @@ export default {
     },
     cadastrar() {
       api
-        .post("medico", {
+        .post('medico', {
           nome: this.medico.nome,
           CRM: this.medico.CRM,
           telefone: this.medico.telefone,
@@ -269,12 +267,12 @@ export default {
           this.refresh();
         })
         .catch((e) => {
-          console.log("Erro: " + e.message);
+          console.log(`Erro: ${e.message}`);
         });
     },
     atualizar() {
       api
-        .put("medico", {
+        .put('medico', {
           id: this.medico.id,
           nome: this.medico.nome,
           CRM: this.medico.CRM,
@@ -297,12 +295,11 @@ export default {
       if (this.medico.especialidades.indexOf(this.especialidade) === -1) {
         this.medico.especialidades.push(this.especialidade);
       }
-
       this.especialidade = {};
     },
     removeEspecialidade(id) {
       console.log(`Remover especialidade ${id}`);
-      let narr = [];
+      const narr = [];
       this.medico.especialidades.forEach((value) => {
         if (value.id !== id) narr.push(value);
       });

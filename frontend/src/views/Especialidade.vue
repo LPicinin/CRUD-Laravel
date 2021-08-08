@@ -1,9 +1,16 @@
 <template>
-  <main-layout>
+  <div class="especialidade">
     <div class="container">
       <div class="row mt-5">
         <div
-          class="col-12 border-bottom mb-5 d-flex justify-content-between align-items-center"
+          class="
+            col-12
+            border-bottom
+            mb-5
+            d-flex
+            justify-content-between
+            align-items-center
+          "
         >
           <h2 :title="ex">{{ name }}</h2>
           <p>{{ especialidadesCount }}</p>
@@ -109,16 +116,14 @@
         </div>
       </div>
     </div>
-  </main-layout>
+  </div>
 </template>
+
 <script>
-import MainLayout from "../layouts/Main.vue";
 import api from "../api";
 
 export default {
-  components: {
-    "main-layout": MainLayout,
-  },
+  name: "Especialidade",
   data() {
     return {
       queryBusca: "",
@@ -189,7 +194,7 @@ export default {
           this.refresh();
         })
         .catch((e) => {
-          console.log("Erro: " + e.message);
+          console.log(`Erro: ${e.message}`);
         });
     },
     atualizar(especialidade) {
@@ -228,5 +233,4 @@ export default {
   align-items: flex-end;
   justify-content: flex-end;
 }
-
 </style>
