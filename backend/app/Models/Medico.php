@@ -35,9 +35,7 @@ class Medico extends Model
             $sql->where('nome', 'like', '%'.$nome.'%');
         if($limite != 0)
             $sql = $sql->limit($limite);
-        $medicos = $sql->get();
-        foreach($medicos as $med)
-            $med->especialidades;
+        $medicos = $sql->with('especialidades')->get();//with carrega as especialidades relacionadas
         return $medicos;
     }
 
@@ -82,7 +80,7 @@ class Medico extends Model
             $medico->CRM = $request->input('CRM');
             $medico->telefone = $request->input('telefone');
             $medico->email = $request->input('email');
-            $medico->dt_cadastro = new Carbon();
+            $medico->dt_cadastro = $request->input('dt_cadastro');
             $medico->save();
             $medico->especialidades()->sync($request->input('especialidades'));
 

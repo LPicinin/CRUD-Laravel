@@ -276,6 +276,7 @@ export default {
           id: this.medico.id,
           nome: this.medico.nome,
           CRM: this.medico.CRM,
+		  dt_cadastro: this.medico.dt_cadastro,
           telefone: this.medico.telefone,
           email: this.medico.email,
           especialidades: this.medico.especialidades.map((es) => es.id),
